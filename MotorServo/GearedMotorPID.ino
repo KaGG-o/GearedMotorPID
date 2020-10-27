@@ -20,6 +20,8 @@ long interval = 20;        // time constant for timers
 int angle;
 int red;
 
+int shoulterOffset = 95;
+
 void setup() {
 
   pinMode(A0, INPUT);
@@ -43,7 +45,7 @@ void loop() {
         angle = Serial.parseInt();
 
         if(Serial.read() == '\n'){
-          angle = constrain(angle, -255, 255);
+          angle = constrain(angle, 0, 180);
         }
 
 
@@ -64,7 +66,7 @@ void MotorAngle(int leg, int angle){
     Setpoint1 = angle;
     red = angle;
     int rot = analogRead(A0);
-    Input1 = map(rot, 0, 1023, -255, 255);
+    Input1 = map(rot, 0,1023,0,180);
     
     PID1.Compute();
     Serial.print(red);
@@ -92,13 +94,12 @@ void MotorAngle(int leg, int angle){
   
 }
 //*****************************************************************/
-float filter(float number){         // That geared motor can't move at values below 45 pwm signal because of gears in geared box.
-  if(number < 45 && number > 10){
-    number = 45;
+float filter(float number){
+  if(number < 55 && number > 3){
+    number = 55;
     return number;
   }
   else{
     return number;
   }
 }
-
